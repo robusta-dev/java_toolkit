@@ -18,4 +18,6 @@ RUN /root/.local/bin/poetry install --no-interaction --no-root
 COPY src /app/src
 RUN /root/.local/bin/poetry install
 
+CMD exec /bin/bash -c "trap : TERM INT; sleep infinity & wait"
+
 #run on jenkens
