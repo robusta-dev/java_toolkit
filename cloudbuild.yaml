@@ -1,0 +1,6 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/genuine-flight-317411/java-toolkit-aux/jtk-11', '.']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/genuine-flight-317411/java-toolkit-aux/jtk-11']
+images: ['gcr.io/genuine-flight-317411/java-toolkit-aux/jtk-11']
