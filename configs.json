@@ -1,9 +1,0 @@
-{
-  "JDK_PATH": "/opt/java/openjdk",
-  "MKDIR_POD_CMD": "mkdir /proc/{}/cwd/mnt/robusta",
-  "RMDIR_POD_CMD": "rm -R /proc/{}/cwd/mnt/robusta",
-  "COPY_PATH": "/proc/$PID_VAL/cwd/mnt/robusta",
-  "JMAP_CMD": "/mnt/robusta/openjdk/bin/jmap -J-Xshareclasses:nonfatal -histo {}",
-  "JSTACK_CMD": "mnt/robusta/openjdk/bin/jstack -J-Xshareclasses:nonfatal -l {}",
-  "NSENTER_CMD": "nsenter -t {} -p -m {}"
-}
