@@ -1,0 +1,9 @@
+JDK_PATH= "/app/openjdk"
+MKDIR_POD_CMD= 'mkdir {}'
+RMDIR_POD_CMD= "rm -R {}"
+DST_MOUNT_PATH= "/proc/{}/cwd/mnt/robusta"
+COPY_CMD= "cp -R {} {DST_MOUNT_PATH}"
+JDK_NAME= "openjdk"
+JMAP_CMD= "{}/bin/jmap -J-Xshareclasses:nonfatal -histo {}"
+JSTACK_CMD= "{}/bin/jstack -J-Xshareclasses:nonfatal -l {}"
+NSENTER_CMD= "nsenter -t {} -p -m {}"
