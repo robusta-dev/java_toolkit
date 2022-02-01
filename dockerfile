@@ -1,6 +1,3 @@
-FROM adoptopenjdk/openjdk11-openj9:jdk-11.0.13_8_openj9-0.29.0-debian
-RUN mkdir /app
-RUN cp -R /opt/java/openjdk /app
 
 FROM python:3.8-slim-buster
 
@@ -17,7 +14,7 @@ RUN /root/.local/bin/poetry install --no-interaction --no-root
 
 COPY src /app/src
 RUN /root/.local/bin/poetry install
-
+COPY --from=adoptopenjdk/openjdk11-openj9:jdk-11.0.13_8_openj9-0.29.0-debian /opt/java/openjdk /app/openjdk
 CMD exec /bin/bash -c "trap : TERM INT; sleep infinity & wait"
 
 #run on jenkens

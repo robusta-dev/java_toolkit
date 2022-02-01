@@ -8,39 +8,40 @@ from os.path import join
 app = typer.Typer()
 
 
-class JDKMounter:
+def run_command(cmd: str, verbose: bool):
+    if verbose:
+        typer.echo(f"running {cmd}")
+    output = subprocess.Popen(
+        cmd, shell=True, stdin=subprocess.PIPE, stderr=subprocess.STDOUT
+    )
+    output.wait()
+    if verbose:
+        typer.echo(output.decode())
+
+
+class JDKMounter(object):
     mnt_path =""
     verbose = False
 
     def __init__(self, pid: str, verbose: bool):
         self.verbose = verbose
         self.mnt_path = DST_MOUNT_PATH.format(pid)
+
+    def __enter__(self):
         mkdir_cmd = MKDIR_POD_CMD.format(self.mnt_path)
-        run_command(mkdir_cmd, verbose)
+        run_command(mkdir_cmd, self.verbose)
+        return self
 
     def get_mounted_jdk_dir(self):
-            return join(self.mnt_path, JDK_NAME )
+            return join(LOCAL_MOUNT_PATH, JDK_NAME )
 
-    def __del__(self):
+    def __exit__(self, exc_type, exc_val, exc_tb):
         rm_dir_cmd = RMDIR_POD_CMD.format(self.mnt_path)
         run_command(rm_dir_cmd, self.verbose)
 
 def run_cmd_in_proc_namespace(pid, command_to_run, verbose):
     nsenter_cmd_formatted = NSENTER_CMD.format(pid, command_to_run)
     run_command(nsenter_cmd_formatted, verbose)
-
-def run_command(cmd: str, verbose: bool):
-    if verbose:
-        typer.echo(f"running {cmd}")
-    output = subprocess.check_output(
-        cmd, shell=True, stdin=subprocess.PIPE, stderr=subprocess.STDOUT
-    )
-    if verbose:
-        typer.echo(output.decode())
-
-def get_java_toolkit_configs():
-    with open ('configs.json', "r") as json_file:
-        return json.loads(json_file.read())
 
 @app.command()
 def pod_ps(pod_uid: str):
