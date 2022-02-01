@@ -14,9 +14,12 @@ def run_command(cmd: str, verbose: bool):
     output = subprocess.Popen(
         cmd, shell=True, stdin=subprocess.PIPE, stderr=subprocess.STDOUT
     )
-    output.wait()
+    return_code = output.wait()
+    if return_code:
+        raise subprocess.CalledProcessError(return_code, cmd)
     if verbose:
-        typer.echo(output.decode())
+        pass
+        #typer.echo(output.decode())
 
 
 class JDKMounter(object):
@@ -30,6 +33,8 @@ class JDKMounter(object):
     def __enter__(self):
         mkdir_cmd = MKDIR_POD_CMD.format(self.mnt_path)
         run_command(mkdir_cmd, self.verbose)
+        cp_cmd=COPY_CMD.format(JDK_PATH, self.mnt_path)
+        run_command(cp_cmd, self.verbose)
         return self
 
     def get_mounted_jdk_dir(self):
@@ -54,14 +59,14 @@ def find_pid(pod_uid: str, cmdline: str, exe: str):
             typer.echo(proc.pid)
 
 @app.command()
-def jmap(pid: int, verbose: bool = False):
+def jmap(pid: int, verbose: bool = True):
     with JDKMounter(pid, verbose) as jdk_mounter:
         jstack_cmd = JMAP_CMD.format(jdk_mounter.get_mounted_jdk_dir(), 1)
         run_cmd_in_proc_namespace(pid, jstack_cmd, verbose)
 
 
 @app.command()
-def jstack(pid: int, verbose: bool = False):
+def jstack(pid: int, verbose: bool = True):
     with JDKMounter(pid, verbose) as jdk_mounter:
         jstack_cmd = JSTACK_CMD.format(jdk_mounter.get_mounted_jdk_dir(), 1)
         run_cmd_in_proc_namespace(pid, jstack_cmd, verbose)
