@@ -7,13 +7,14 @@ RUN apt-get update \
 
 RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python -
 RUN /root/.local/bin/poetry config virtualenvs.create false
-COPY poetry.lock pyproject.toml /app/
+COPY poetry.lock pyproject.toml additional_bash_commands.sh /app/
 WORKDIR /app/
 RUN /root/.local/bin/poetry install --no-interaction --no-root
 
 COPY src /app/src
 RUN /root/.local/bin/poetry install
-COPY --from=adoptopenjdk/openjdk11-openj9:jdk-11.0.13_8_openj9-0.29.0-debian /opt/java/openjdk /app/openjdk
+RUN cat additional_bash_commands.sh >> ~/.bashrc
+COPY --from=adoptopenjdk/openjdk11-openj9:ppc64le-ubuntu-jdk-11.0.14_9_openj9-0.30.0 /opt/java/openjdk /app/openjdk
 CMD exec /bin/bash -c "trap : TERM INT; sleep infinity & wait"
 
 #run on jenkens
