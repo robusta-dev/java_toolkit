@@ -1,6 +1,7 @@
 #!/usr/local/bin/python3
 import re
 from typing import List
+from .remote_ns_cmd import run_cmd_in_proc_namespace
 
 import psutil
 import typer
@@ -13,6 +14,8 @@ other_regex2 = re.compile(r"\d+:.+:/kubepods/.*/pod([^/]+)/([0-9a-f]{64})")
 other_regex3 = re.compile(
     r"\d+:.+:/kubepods\.slice/kubepods-[^/]+\.slice/kubepods-[^/]+-pod([^/]+)\.slice/docker-([0-9a-f]{64})"
 )
+
+ps_regex = re.compile(r"\s*(?P<pid>.*?)\s+(?P<cmd>.*?)\s+(?P<cmd_args>.*?)\n")
 
 app = typer.Typer()
 
@@ -60,4 +63,26 @@ def get_pod_processes(pod_uid: str) -> ProcessList:
             proc = psutil.Process(pid)
             processes.append(Process(pid=pid, exe=proc.exe(), cmdline=proc.cmdline()))
     return ProcessList(processes=processes)
+
+def get_ns_processes(pid_in_ns: int, verbose: bool):
+    cmd = "ps -o pid,comm,args | tail -n +2 "
+    processes = run_cmd_in_proc_namespace(pid_in_ns, cmd, verbose)
+    processes = processes.split('\n')
+    return_proc_list=[]
+    processes.remove(processes[0]) #title column
+    for proc_line in processes:
+        if "tail -n" in proc_line or "ps -o pid,comm,args" in proc_line:
+            continue
+        match = ps_regex.match(proc_line)
+        pid = int(match.group("pid"))
+        exe = match.group("cmd")
+        cmdline = match.group("cmd_args")
+        if cmdline is None:
+            cmdline = []
+        else:
+            cmdline = cmdline.split(' ')
+        return_proc_list.append(Process(pid=pid, exe=exe, cmdline=cmdline))
+    return return_proc_list
+
+
 
