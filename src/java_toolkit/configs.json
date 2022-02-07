@@ -1,8 +1,0 @@
-{
-  "JDK_PATH": "/app/openjdk",
-  "COPY_CMD": "cp -R {JDK_PATH} {DST_MOUNT_PATH}",
-  "JDK_NAME": "openjdk",
-  "JMAP_CMD": "{JDK_PATH}/bin/jmap -J-Xshareclasses:nonfatal -histo {LOCAL_PID}",
-  "JSTACK_CMD": "{JDK_PATH}/bin/jstack -J-Xshareclasses:nonfatal -l {LOCAL_PID}",
-  "NSENTER_CMD": "nsenter -t {PID} -p -m {CMD}"
-}

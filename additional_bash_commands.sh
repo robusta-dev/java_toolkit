@@ -1,11 +1,14 @@
 alias get_java_pid='ps aux | grep java | grep -v grep | cut -d" " -f6'
-alias push_jdk='mkdir -p /proc/$(ps aux | grep java | grep -v grep | cut -d" " -f6)/cwd/mnt/robusta;\
-cp -r /app/openjdk /proc/$(ps aux | grep java | grep -v grep | cut -d" " -f6)/cwd/mnt/robusta'
-alias cleanup='rm -r /proc/$(ps aux | grep java | grep -v grep | cut -d" " -f6)/cwd/mnt/robusta'
-alias podns_shell='nsenter -t $(ps aux | grep java | grep -v grep | cut -d" " -f6) -m -p /bin/sh'
+alias push_jdk='mkdir -p /proc/$PID/cwd/mnt/robusta;\
+cp -r /app/openjdk /proc/$PID/cwd/mnt/robusta'
+alias cleanup='rm -r /proc/$PID/cwd/mnt/robusta'
+alias podns_shell='nsenter -t $PID -m -p /bin/sh'
+
+alias push_jdk='mkdir -p /proc/$PID/cwd/mnt/robusta;\
+cp -r /app/openjdk* /proc/$PID/cwd/mnt/robusta'
 
 function nsjdk(){
-	local NSENTER_CMD='nsenter -t $(ps aux | grep java | grep -v grep | cut -d" " -f6) -m -p /mnt/robusta/openjdk/bin/'
+	local NSENTER_CMD='nsenter -t $PID -m -p /mnt/robusta/openjdk/bin/'
 	COMMAND=""
 	if [ "$1" = "jmap" ]; then COMMAND="jmap $2";
 	elif [ "$1" = "jstack" ]; then COMMAND="java-toolkit jstack $2";
