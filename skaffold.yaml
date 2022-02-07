@@ -1,0 +1,29 @@
+apiVersion: skaffold/v2beta1
+kind: Config
+metadata:
+  name: java-tools
+build:
+  artifacts:
+  - image: us-central1-docker.pkg.dev/genuine-flight-317411/java-toolkit/jtk-11
+    docker:
+      dockerfile: dockerfile
+  local:
+    push: true
+    concurrency: 0
+deploy:
+  kubectl:
+    manifests:
+    - test_deployment.yaml
+
+
+profiles:
+- name: apple-m1-dev
+  build:
+    artifacts:
+      - image: us-central1-docker.pkg.dev/genuine-flight-317411/java-toolkit/jtk-11
+        context: .
+        custom:
+          buildCommand: ./build_on_apple_m1.sh
+    local:
+      push: true
+      concurrency: 0

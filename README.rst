@@ -10,3 +10,7 @@ How to support your specific jdk
 | example commands
 | 'java-toolkit jmap PID_HERE'
 | 'java-toolkit jstack PID_HERE'
+
+| For building you can either use skaffold or gcloud
+| For gcloud run the following command
+| 'gcloud builds submit --config ./cloudbuild.yaml .'
