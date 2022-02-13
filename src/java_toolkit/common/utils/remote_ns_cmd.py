@@ -11,7 +11,6 @@ def run_command(cmd: str, verbose: bool):
         typer.echo(f"output recieved: \n{output.decode()}")
     return output.decode()
 
-def run_cmd_in_proc_namespace(pid, command_to_run, verbose):
-    NSENTER_CMD = "nsenter -t {} -p -m {}"
-    nsenter_cmd_formatted = NSENTER_CMD.format(pid, command_to_run)
-    return run_command(nsenter_cmd_formatted, verbose)
+def run_cmd_in_proc_namespace(pid: int, command_to_run: str, verbose: bool):
+    nsenter_cmd = f"nsenter -t {pid} -a {command_to_run}"
+    return run_command(nsenter_cmd, verbose)

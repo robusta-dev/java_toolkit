@@ -15,10 +15,6 @@ COPY src /app/src
 
 RUN /root/.local/bin/poetry install
 RUN cat additional_bash_commands.sh >> ~/.bashrc
-#COPY jdk_11_9 /app/openjdk3
 COPY --from=openjdk:11.0.14-jdk /usr/local/openjdk-11  /app/openjdk
-#COPY --from=adoptopenjdk/openjdk11-openj9:jdk-11.0.14_9_openj9-0.30.0-alpine /opt/java/openjdk  /app/openjdk2
 
 CMD exec /bin/bash -c "trap : TERM INT; sleep infinity & wait"
-
-#run on jenkens

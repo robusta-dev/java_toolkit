@@ -11,6 +11,6 @@ How to support your specific jdk
 | 'java-toolkit jmap PID_HERE'
 | 'java-toolkit jstack PID_HERE'
 
-| For building you can either use skaffold or gcloud
-| For gcloud run the following command
-| 'gcloud builds submit --config ./cloudbuild.yaml .'
+| For building you can use skaffold
+| For running on Google Cloud we have a faster build with skaffold
+| 'skaffold run -p gcloud-build'
