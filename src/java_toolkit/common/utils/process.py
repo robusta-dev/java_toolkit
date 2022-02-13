@@ -1,7 +1,7 @@
 #!/usr/local/bin/python3
 import re
 from typing import List
-from .remote_ns_cmd import run_cmd_in_proc_namespace
+from .remote_ns_cmd import run_command
 
 import psutil
 import typer
@@ -14,8 +14,6 @@ other_regex2 = re.compile(r"\d+:.+:/kubepods/.*/pod([^/]+)/([0-9a-f]{64})")
 other_regex3 = re.compile(
     r"\d+:.+:/kubepods\.slice/kubepods-[^/]+\.slice/kubepods-[^/]+-pod([^/]+)\.slice/docker-([0-9a-f]{64})"
 )
-
-ps_regex = re.compile(r"\s*(?P<pid>.*?)\s+(?P<cmd>.*?)\s+(?P<cmd_args>.*?)$")
 
 app = typer.Typer()
 
@@ -68,26 +66,14 @@ def get_pid_info(pid: int) -> Process:
     proc = psutil.Process(pid)
     return Process(pid=pid, exe=proc.exe(), cmdline=proc.cmdline())
 
-def get_ns_processes(pid_in_ns: int, verbose: bool):
-    cmd = "ps -Ao pid,comm,args | grep -v PID"
-    processes = run_cmd_in_proc_namespace(pid_in_ns, cmd, verbose)
-    processes = processes.split('\n')
-    return_proc_list=[]
-    for proc_line in processes:
-        if not proc_line:
-            continue
-        match = ps_regex.match(proc_line)
-        if not match:
-            continue
-        pid = int(match.group("pid"))
-        exe = match.group("cmd")
-        cmdline = match.group("cmd_args")
-        if cmdline is None:
-            cmdline = []
-        else:
-            cmdline = cmdline.split(' ')
-        return_proc_list.append(Process(pid=pid, exe=exe, cmdline=cmdline))
-    return ProcessList(processes=return_proc_list)
+def get_nspid(pid_in_ns: int, verbose: bool):
+    cmd = f"cat /proc/{pid_in_ns}/status"
+    status_output = run_command(cmd, verbose)
+    nspid_regex = re.compile(r".+NSpid:\s+(?P<pid>.*?)\s+(?P<nspid>.*?)\s+", re.DOTALL)
+    match = nspid_regex.match(status_output)
+    if not match:
+        raise Exception(f"No match found for pid {pid_in_ns}")
+    return int(match.group("nspid"))
 
 
 

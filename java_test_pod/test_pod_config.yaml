@@ -1,12 +1,12 @@
 kind: Pod
 apiVersion: v1
 metadata:
-  name: test_java_pod
+  name: test-java-pod
   labels:
-    app: test_java_pod
+    app: test-java-pod
 spec:
   containers:
-      - name: test_java_pod
+      - name: test-java-pod
         image: gcr.io/genuine-flight-317411/java-toolkit/test_java_pod
         ports:
         - containerPort: 1111
@@ -17,7 +17,7 @@ metadata:
   name: example-service
 spec:
   selector:
-    app: test_java_pod
+    app: test-java-pod
   ports:
     - port: 8222
       targetPort: 1111
