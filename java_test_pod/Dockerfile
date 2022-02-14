@@ -7,6 +7,5 @@ RUN ["jar", "-cvfm", "HelloWorld.jar", "/java_files/manifest.MF", "/hello_world/
 
 FROM openjdk:11.0.14-jre
 COPY --from=0 /HelloWorld.jar ./
-RUN apt-get update
 ENTRYPOINT ["java", "-jar", "HelloWorld.jar", "1111"]
 

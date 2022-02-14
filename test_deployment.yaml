@@ -24,7 +24,7 @@ spec:
             type: Directory
       containers:
         - name: java-tk-11
-          image: gcr.io/genuine-flight-317411/java-toolkit/jtk-11
+          image: us-central1-docker.pkg.dev/genuine-flight-317411/devel/java-toolkit-11
           imagePullPolicy: Always
           volumeMounts:
             - name: host-disk
