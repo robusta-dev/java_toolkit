@@ -10,9 +10,9 @@ class TmpRemotePodMounter(object):
         self.remote_mnt_path = f"/proc/{pid}/cwd{local_mnt_path}"
 
     def __enter__(self):
-        mkdir_cmd = f"mkdir -p {self.remote_mnt_path}"
+        mkdir_cmd = f"mkdir -p '{self.remote_mnt_path}'"
         run_command(mkdir_cmd, self.verbose)
-        cp_cmd= f"cp -R {self.src_dir} {self.remote_mnt_path}"
+        cp_cmd= f"cp -R '{self.src_dir}' '{self.remote_mnt_path}'"
         run_command(cp_cmd, self.verbose)
         return self
 
@@ -20,5 +20,5 @@ class TmpRemotePodMounter(object):
         return path.join(self.local_mnt_path, path.basename(self.src_dir) )
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        rm_dir_cmd = f"rm -R {self.remote_mnt_path}"
+        rm_dir_cmd = f"rm -R '{self.remote_mnt_path}'"
         run_command(rm_dir_cmd, self.verbose)
