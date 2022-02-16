@@ -12,19 +12,26 @@ KNOWN_ERROR_MESSAGE ="Java-toolkit does not support the current cluster type.\n"
 def check_for_known_error(output: str):
     for known_error in KNOWN_NSENTER_ERRORS:
         if known_error in output:
-            return KNOWN_ERROR_MESSAGE
-    return output
+            return True
+    return False
 
 def run_command(cmd: str, verbose: bool):
     if verbose:
         typer.echo(f"Running {cmd}")
-    output = subprocess.check_output(
-        cmd, shell=True, stdin=subprocess.PIPE, stderr=subprocess.STDOUT)
+    result = subprocess.run(
+        cmd, shell=True, capture_output=True)
     if verbose:
-        typer.echo(f"output recieved: \n{output.decode()}")
-    return output.decode()
+        typer.echo(f"output recieved: \n{result.stdout}")
+    if result.stderr:
+        if check_for_known_error(result.stderr.decode()):
+            return KNOWN_ERROR_MESSAGE
+        raise subprocess.CalledProcessError(
+            returncode=result.returncode,
+            cmd=result.args,
+            output=result.stderr
+        )
+    return result.stdout.decode()
 
 def run_cmd_in_proc_namespace(pid: int, command_to_run: str, verbose: bool):
     nsenter_cmd = f"nsenter -t {pid} -a {command_to_run}"
-    output = run_command(nsenter_cmd, verbose)
-    return check_for_known_error(output)
+    return run_command(nsenter_cmd, verbose)
