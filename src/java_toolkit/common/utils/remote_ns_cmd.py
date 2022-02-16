@@ -22,7 +22,7 @@ def run_command(cmd: str, verbose: bool):
         cmd, shell=True, capture_output=True)
     if verbose:
         typer.echo(f"output recieved: \n{result.stdout}")
-    if result.stderr:
+    if result.stderr or result.returncode != 0:
         if check_for_known_error(result.stderr.decode()):
             return KNOWN_ERROR_MESSAGE
         raise subprocess.CalledProcessError(
