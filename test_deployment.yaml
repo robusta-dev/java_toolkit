@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: java-tk-11
+  labels:
+    app: java-tk-11
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: java-tk-11
+  template:
+    metadata:
+      labels:
+        app: java-tk-11
+    spec:
+      hostIPC: true
+      hostNetwork: true
+      hostPID: true
+      volumes:
+        - name: host-disk
+          hostPath:
+            path: /
+            type: Directory
+      containers:
+        - name: java-tk-11
+          image: us-central1-docker.pkg.dev/genuine-flight-317411/devel/java-toolkit-11
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: host-disk
+              mountPath: /host-disk
+          securityContext:
+            privileged: true
+            capabilities:
+              add:
+                - SYS_PTRACE
+                - SYS_ADMIN

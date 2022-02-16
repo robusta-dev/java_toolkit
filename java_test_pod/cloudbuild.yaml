@@ -1,0 +1,6 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/genuine-flight-317411/java-toolkit/test_java_pod', '.']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/genuine-flight-317411/java-toolkit/test_java_pod']
+images: ['gcr.io/genuine-flight-317411/java-toolkit/test_java_pod']
