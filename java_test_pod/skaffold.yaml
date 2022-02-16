@@ -1,12 +1,12 @@
 apiVersion: skaffold/v2beta1
 kind: Config
 metadata:
-  name: java-test-pod
+  name: test_java_pod
 build:
   artifacts:
-  - image: us-central1-docker.pkg.dev/genuine-flight-317411/java-toolkit/tests/test_java_pod
+  - image: us-central1-docker.pkg.dev/genuine-flight-317411/devel/test_java_pod
     docker:
-      dockerfile: dockerfile
+      dockerfile: Dockerfile
   local:
     push: true
     concurrency: 0
@@ -20,7 +20,7 @@ profiles:
 - name: apple-m1-dev
   build:
     artifacts:
-      - image: us-central1-docker.pkg.dev/genuine-flight-317411/java-toolkit/tests/test_java_pod
+      - image: us-central1-docker.pkg.dev/genuine-flight-317411/devel/test_java_pod
         context: .
         custom:
           buildCommand: ./build_on_apple_m1.sh
@@ -32,7 +32,7 @@ profiles:
     googleCloudBuild:
         projectId: genuine-flight-317411
     artifacts:
-      - image: us-central1-docker.pkg.dev/genuine-flight-317411/java-toolkit/tests/test_java_pod
+      - image: us-central1-docker.pkg.dev/genuine-flight-317411/devel/test_java_pod
         context: .
         docker:
           dockerfile: Dockerfile
