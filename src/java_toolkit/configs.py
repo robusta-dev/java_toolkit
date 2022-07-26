@@ -14,5 +14,5 @@ LOCAL_MOUNT_PATH= "/mnt/robusta"
     if it requires a pid add it in the {pid} field
     any flags the command needs add to the command itself
 """
-JMAP_CMD= "{jdk_path}/bin/jmap -histo:live {pid}"
-JSTACK_CMD= "{jdk_path}/bin/jstack -l {pid}"
+JMAP_CMD= "{jdk_path}/jattach {pid} dumpheap"
+JSTACK_CMD= "{jdk_path}/jattach {pid} threaddump"
