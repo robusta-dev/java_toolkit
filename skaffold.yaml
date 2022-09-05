@@ -36,3 +36,13 @@ profiles:
         context: .
         docker:
           dockerfile: dockerfile
+- name: arm
+  build:
+    artifacts:
+      - image: us-central1-docker.pkg.dev/genuine-flight-317411/devel/java-toolkit-11
+        context: .
+        custom:
+          buildCommand: ./build_with_arm.sh
+    local:
+      push: true
+      concurrency: 0
