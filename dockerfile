@@ -8,7 +8,9 @@ ENV PATH="/app/venv/bin:$PATH"
 WORKDIR /app
 
 RUN apt-get update \
-  && apt-get install -y gcc
+  && apt-get install -y gcc \
+  dpkg --add-architecture arm64
+  
 RUN pip install poetry==1.6.1
 
 COPY poetry.lock pyproject.toml /app/
