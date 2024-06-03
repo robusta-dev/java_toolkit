@@ -31,7 +31,7 @@ COPY --from=builder /app/venv /venv
 
 COPY src /app/src
 
-RUN echo -e '#!/bin/bash\npython /app/src/java_toolkit/main.py $@' > /usr/bin/java-toolkit && \
+RUN echo '#!/bin/bash\npython /app/src/java_toolkit/main.py $@' > /usr/bin/java-toolkit && \
     chmod +x /usr/bin/java-toolkit
 
 # -u disables stdout buffering https://stackoverflow.com/questions/107705/disable-output-buffering
