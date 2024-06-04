@@ -1,7 +1,7 @@
 #!/usr/local/bin/python3
 import re
 from typing import List
-from src.java_toolkit.common.utils.remote_ns_cmd import run_command
+from java_toolkit.common.utils.remote_ns_cmd import run_command
 
 import psutil
 import typer

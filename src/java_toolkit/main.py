@@ -1,10 +1,10 @@
 #!/usr/local/bin/python3
 import subprocess
 import typer
-from src.java_toolkit.common.utils.process import *
-from src.java_toolkit.common.utils.remote_ns_cmd import run_cmd_in_proc_namespace
-from src.java_toolkit.common.utils.tmp_mount import TmpRemotePodMounter
-from src.java_toolkit.configs import *
+from java_toolkit.common.utils.process import *
+from java_toolkit.common.utils.remote_ns_cmd import run_cmd_in_proc_namespace
+from java_toolkit.common.utils.tmp_mount import TmpRemotePodMounter
+from java_toolkit.configs import *
 
 app = typer.Typer()
 

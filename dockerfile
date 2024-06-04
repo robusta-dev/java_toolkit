@@ -9,8 +9,10 @@ WORKDIR /app
 
 RUN apt-get update \
   && apt-get install -y gcc \
-  dpkg --add-architecture arm64
-  
+  && dpkg --add-architecture arm64 \
+  && apt-get purge -y --auto-remove \
+  && rm -rf /var/lib/apt/lists/*
+
 RUN pip install poetry==1.6.1
 
 COPY poetry.lock pyproject.toml /app/
