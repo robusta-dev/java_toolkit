@@ -13,8 +13,9 @@ java-toolkit = "java_toolkit.main:app"
 [tool.poetry.dependencies]
 python = "^3.8"
 typer = "^0.4.0"
-psutil = "^5.9.0"
-pydantic = "^1.9.0"
+psutil = "5.9.8"
+pydantic = "1.10.13"
+typing-extensions = "4.6.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

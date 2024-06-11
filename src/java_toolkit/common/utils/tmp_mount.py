@@ -1,4 +1,4 @@
-from .remote_ns_cmd import run_command
+from java_toolkit.common.utils.remote_ns_cmd import run_command
 from os import path
 
 class TmpRemotePodMounter(object):
