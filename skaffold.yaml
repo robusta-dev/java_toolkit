@@ -4,7 +4,7 @@ metadata:
   name: java-tools
 build:
   artifacts:
-  - image: us-central1-docker.pkg.dev/genuine-flight-317411/devel/java-toolkit-11
+  - image: robustadev/java-toolkit
     docker:
       dockerfile: dockerfile
   local:
@@ -20,7 +20,7 @@ profiles:
 - name: apple-m1-dev
   build:
     artifacts:
-      - image: us-central1-docker.pkg.dev/genuine-flight-317411/devel/java-toolkit-11
+      - image: robustadev/java-toolkit
         context: .
         custom:
           buildCommand: ./build_on_apple_m1.sh
@@ -32,14 +32,14 @@ profiles:
     googleCloudBuild:
         projectId: genuine-flight-317411
     artifacts:
-      - image: us-central1-docker.pkg.dev/genuine-flight-317411/devel/java-toolkit-11
+      - image: robustadev/java-toolkit
         context: .
         docker:
           dockerfile: dockerfile
 - name: arm
   build:
     artifacts:
-      - image: us-central1-docker.pkg.dev/genuine-flight-317411/devel/java-toolkit-11
+      - image: robustadev/java-toolkit
         context: .
         custom:
           buildCommand: ./build_with_arm.sh
