@@ -8,7 +8,7 @@ ENV PATH="/app/venv/bin:$PATH"
 WORKDIR /app
 
 RUN apt-get update \
-  && apt-get install -y gcc \
+  && apt-get install -y gcc procps \
   && dpkg --add-architecture arm64 \
   && apt-get purge -y --auto-remove \
   && rm -rf /var/lib/apt/lists/*
